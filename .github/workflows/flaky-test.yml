@@ -1,0 +1,42 @@
+name: Flaky Test Confirmation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-flaky-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout idoft repository
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Clone test repository
+        run: |
+          git clone https://github.com/hellokaton/30-seconds-of-java8
+          cd 30-seconds-of-java8
+          git checkout 1af5d4dee567f00e662cb9b74abc16067312e338
+
+      - name: Build with Maven
+        run: |
+          cd 30-seconds-of-java8
+          mvn clean install -DskipTests -pl . -am
+
+      - name: Run test normally
+        run: |
+          cd 30-seconds-of-java8
+          mvn -pl . test -Dtest=snippets.Snippets-Tests#union_test
+
+      - name: Run test with NonDex
+        run: |
+          cd 30-seconds-of-java8
+          mvn -pl . edu.illinois:nondex-maven-plugin:2.1.1:nondex -Dtest=snippets.SnippetsTests#union_test -DnondexRuns=10  
