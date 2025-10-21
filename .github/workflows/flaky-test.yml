@@ -24,7 +24,6 @@ jobs:
         run: |
           git clone https://github.com/hellokaton/30-seconds-of-java8
           cd 30-seconds-of-java8
-          git checkout 1af5d4dee567f00e662cb9b74abc16067312e338
 
       - name: Build with Maven
         run: |
