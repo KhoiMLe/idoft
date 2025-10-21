@@ -34,7 +34,7 @@ jobs:
       - name: Run test normally
         run: |
           cd 30-seconds-of-java8
-          mvn -pl . test -Dtest=snippets.Snippets-Tests#union_test
+          mvn -pl . test -Dtest=snippets.SnippetsTests#union_test
 
       - name: Run test with NonDex
         run: |
